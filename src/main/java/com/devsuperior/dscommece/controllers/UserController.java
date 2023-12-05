@@ -1,13 +1,10 @@
 package com.devsuperior.dscommece.controllers;
 
 import com.devsuperior.dscommece.dto.UserDTO;
-import com.devsuperior.dscommece.entities.User;
 import com.devsuperior.dscommece.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +18,11 @@ public class UserController {
     @GetMapping
     public List<UserDTO> findAll(){
         return service.findAll();
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<UserDTO> findById(@PathVariable Long id){
+        return ResponseEntity.ok(service.findById(id));
     }
 
 }

@@ -20,4 +20,9 @@ public class UserService {
         return users.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
     }
 
+    public UserDTO findById(Long id){
+        User user = repository.findById(id).get();
+        return new UserDTO(user);
+    }
+
 }
