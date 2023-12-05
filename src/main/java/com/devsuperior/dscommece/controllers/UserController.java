@@ -3,6 +3,8 @@ package com.devsuperior.dscommece.controllers;
 import com.devsuperior.dscommece.dto.UserDTO;
 import com.devsuperior.dscommece.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +18,8 @@ public class UserController {
     private UserService service;
 
     @GetMapping
-    public List<UserDTO> findAll(){
-        return service.findAll();
+    public ResponseEntity<Page<UserDTO>> findAll(Pageable pageable){
+        return ResponseEntity.ok(service.findAll(pageable));
     }
 
     @GetMapping(value = "/{id}")
