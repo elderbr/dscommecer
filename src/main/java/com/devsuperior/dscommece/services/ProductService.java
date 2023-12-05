@@ -31,4 +31,10 @@ public class ProductService {
             throw new ResourceNotFoundException("O produto não existe!!!");
         }
     }
+
+    @Transactional
+    public ProductDTO insert(Product entity){
+        Product product = repository.save(entity);
+        return new ProductDTO(product);
+    }
 }
