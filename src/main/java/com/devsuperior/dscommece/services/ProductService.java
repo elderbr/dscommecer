@@ -37,4 +37,15 @@ public class ProductService {
         Product product = repository.save(entity);
         return new ProductDTO(product);
     }
+
+    @Transactional
+    public ProductDTO update(Long id, Product entity){
+        Product product = repository.getReferenceById(id);
+        if(product == null){
+            throw new ResourceNotFoundException("O produto não existe!");
+        }
+        entity.setId(id);
+        Product productUpdate = repository.save(entity);
+        return new ProductDTO(productUpdate);
+    }
 }
