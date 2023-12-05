@@ -33,19 +33,30 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductDTO insert(Product entity){
-        Product product = repository.save(entity);
-        return new ProductDTO(product);
+    public ProductDTO insert(ProductDTO dto){
+        Product entity = copyDTOtoProduct(dto);
+        Product newProduct = repository.save(entity);
+        return new ProductDTO(newProduct);
     }
 
     @Transactional
-    public ProductDTO update(Long id, Product entity){
-        Product product = repository.getReferenceById(id);
-        if(product == null){
+    public ProductDTO update(Long id, ProductDTO dto){
+        if(repository.getReferenceById(id) == null){
             throw new ResourceNotFoundException("O produto não existe!");
         }
-        entity.setId(id);
-        Product productUpdate = repository.save(entity);
+        Product newProduct = copyDTOtoProduct(dto);
+        newProduct.setId(id);
+
+        Product productUpdate = repository.save(newProduct);
         return new ProductDTO(productUpdate);
+    }
+
+    private Product copyDTOtoProduct(ProductDTO dto){
+        Product entity = new Product();
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setImgUrl(dto.getImgUrl());
+        return entity;
     }
 }

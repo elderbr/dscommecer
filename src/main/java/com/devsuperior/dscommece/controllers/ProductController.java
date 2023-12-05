@@ -28,12 +28,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> insert(@RequestBody Product product){
-        return ResponseEntity.ok(service.insert(product));
+    public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO entity){
+        return ResponseEntity.ok(service.insert(entity));
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody Product product){
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO product){
         return ResponseEntity.ok(service.update(id, product));
     }
 }
