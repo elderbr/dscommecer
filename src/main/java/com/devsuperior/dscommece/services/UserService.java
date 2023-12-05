@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -18,18 +16,48 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
-    public Page<UserDTO> findAll(Pageable pageable){
+    @Transactional(readOnly = true)
+    public Page<UserDTO> findAll(Pageable pageable) {
         Page<User> pages = repository.findAll(pageable);
-        return pages.map(x->new UserDTO(x));
+        return pages.map(x -> new UserDTO(x));
     }
 
-    public UserDTO findById(Long id){
+    @Transactional(readOnly = true)
+    public UserDTO findById(Long id) {
         try {
             User user = repository.findById(id).get();
             return new UserDTO(user);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ResourceNotFoundException("Usuário não existe!!!");
         }
+    }
+
+    @Transactional
+    public UserDTO insert(User user) {
+        if (user == null) {
+            throw new ResourceNotFoundException("Dados do usuário invalidos!!!");
+        }
+
+        // Busca o email para verificar se já existe
+        User userNew = repository.findByEmail(user.getEmail());
+        if (userNew != null) {
+            throw new ResourceNotFoundException("O email já está cadastrado!!!");
+        }
+
+        // 11 9 9999-9999
+        String phone = user.getPhone().replaceAll("[^0-9]", "");
+        if (phone.length() < 11) {
+            throw new ResourceNotFoundException("Número do telefone invalido!!!");
+        }
+        userNew = repository.findByPhone(phone);
+        if(userNew != null){
+            throw new ResourceNotFoundException("Número do telefone já está cadastrado!!!");
+        }
+        user.setPhone(phone);
+
+        // Salvando novo usuário
+        userNew = repository.save(user);
+        return new UserDTO(userNew);
     }
 
 }
