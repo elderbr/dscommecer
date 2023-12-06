@@ -1,12 +1,17 @@
 package com.devsuperior.dscommece.dto;
 
 import com.devsuperior.dscommece.entities.Product;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 
 public class ProductDTO {
 
     private Long id;
+    @NotBlank(message = "O nome não poder vazio!!!")
     private String name;
     private String description;
+    @Positive(message = "O valor não pode ser negativo!!!")
     private Double price;
     private String imgUrl;
 

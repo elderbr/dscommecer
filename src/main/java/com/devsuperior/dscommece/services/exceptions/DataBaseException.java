@@ -1,7 +1,7 @@
 package com.devsuperior.dscommece.services.exceptions;
 
-public class ResourceNotFoundException extends RuntimeException{
-    public ResourceNotFoundException(String message) {
+public class DataBaseException extends RuntimeException{
+    public DataBaseException(String message) {
         super(message);
     }
 }
