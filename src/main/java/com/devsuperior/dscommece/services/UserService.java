@@ -1,7 +1,9 @@
 package com.devsuperior.dscommece.services;
 
 import com.devsuperior.dscommece.dto.UserDTO;
+import com.devsuperior.dscommece.entities.Role;
 import com.devsuperior.dscommece.entities.User;
+import com.devsuperior.dscommece.projections.UserDetailsProjection;
 import com.devsuperior.dscommece.repositories.UserRepository;
 import com.devsuperior.dscommece.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -65,6 +69,16 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        List<UserDetailsProjection> projections = repository.searcUserAndRoleByEmail(username);
+        if(projections.isEmpty()){
+            throw new UsernameNotFoundException("Use not found!");
+        }
+        User user = new User();
+        user.setEmail(username);
+        user.setPassword(projections.get(0).getPassword());
+        for(UserDetailsProjection projection : projections){
+            user.addRole(new Role(projection.getRoleId(), projection.getAuthority()));
+        }
+        return user;
     }
 }

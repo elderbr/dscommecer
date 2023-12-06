@@ -1,4 +1,4 @@
-package com.devsuperior.demo.projections;
+package com.devsuperior.dscommece.projections;
 
 public interface UserDetailsProjection {
     String getUsername();
