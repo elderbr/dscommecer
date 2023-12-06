@@ -1,7 +1,6 @@
 package com.devsuperior.dscommece.controllers;
 
 import com.devsuperior.dscommece.dto.ProductDTO;
-import com.devsuperior.dscommece.entities.Product;
 import com.devsuperior.dscommece.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

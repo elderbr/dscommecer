@@ -3,9 +3,7 @@ package com.devsuperior.dscommece.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_user")
@@ -22,6 +20,14 @@ public class User {
 
     @OneToMany(mappedBy = "client")
     private List<Order> orders = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "tb_user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
@@ -89,6 +95,24 @@ public class User {
 
     public void addOrders(Order order) {
         this.orders.add(order);
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public User addRole(Role role){
+        roles.add(role);
+        return this;
+    }
+
+    public boolean hasRole(String userName){
+        for(Role role : roles){
+            if(role.getAuthority().equals(userName)){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
