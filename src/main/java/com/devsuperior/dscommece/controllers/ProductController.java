@@ -3,6 +3,7 @@ package com.devsuperior.dscommece.controllers;
 import com.devsuperior.dscommece.dto.ProductDTO;
 import com.devsuperior.dscommece.entities.Product;
 import com.devsuperior.dscommece.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,12 +29,18 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO entity){
+    public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO entity){
         return ResponseEntity.ok(service.insert(entity));
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO product){
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @Valid @RequestBody ProductDTO product){
         return ResponseEntity.ok(service.update(id, product));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
