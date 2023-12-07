@@ -9,13 +9,17 @@ import com.devsuperior.dscommece.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -46,8 +50,8 @@ public class UserService implements UserDetailsService {
         }
 
         // Busca o email para verificar se já existe
-        User userNew = repository.findByEmail(user.getEmail());
-        if (userNew != null) {
+        Optional<User> optional = repository.findByEmail(user.getEmail());
+        if (optional != null) {
             throw new ResourceNotFoundException("O email já está cadastrado!!!");
         }
 
@@ -56,7 +60,7 @@ public class UserService implements UserDetailsService {
         if (phone.length() < 11) {
             throw new ResourceNotFoundException("Número do telefone invalido!!!");
         }
-        userNew = repository.findByPhone(phone);
+        User userNew = repository.findByPhone(phone);
         if(userNew != null){
             throw new ResourceNotFoundException("Número do telefone já está cadastrado!!!");
         }
@@ -80,5 +84,22 @@ public class UserService implements UserDetailsService {
             user.addRole(new Role(projection.getRoleId(), projection.getAuthority()));
         }
         return user;
+    }
+
+    protected User authenticated(){
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
+            String username = jwtPrincipal.getClaim("username");
+            return repository.findByEmail(username).get();
+        }catch (Exception e){
+            throw new UsernameNotFoundException("Email not found!");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public UserDTO getMe(){
+        User user = authenticated();
+        return new UserDTO(user);
     }
 }
