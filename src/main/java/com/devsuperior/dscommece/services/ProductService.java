@@ -1,7 +1,9 @@
 package com.devsuperior.dscommece.services;
 
+import com.devsuperior.dscommece.dto.CategoryDTO;
 import com.devsuperior.dscommece.dto.ProductDTO;
 import com.devsuperior.dscommece.dto.ProductMinDTO;
+import com.devsuperior.dscommece.entities.Category;
 import com.devsuperior.dscommece.entities.Product;
 import com.devsuperior.dscommece.repositories.ProductRepository;
 import com.devsuperior.dscommece.services.exceptions.DataBaseException;
@@ -78,6 +80,13 @@ public class ProductService {
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
         entity.setImgUrl(dto.getImgUrl());
+
+        entity.getCategories().clear();
+        for (CategoryDTO catDto : dto.getCategories()) {
+            Category cat = new Category();
+            cat.setId(catDto.getId());
+            entity.getCategories().add(cat);
+        }
         return entity;
     }
 }
