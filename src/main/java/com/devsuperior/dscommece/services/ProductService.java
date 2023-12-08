@@ -1,6 +1,7 @@
 package com.devsuperior.dscommece.services;
 
 import com.devsuperior.dscommece.dto.ProductDTO;
+import com.devsuperior.dscommece.dto.ProductMinDTO;
 import com.devsuperior.dscommece.entities.Product;
 import com.devsuperior.dscommece.repositories.ProductRepository;
 import com.devsuperior.dscommece.services.exceptions.DataBaseException;
@@ -20,9 +21,9 @@ public class ProductService {
     private ProductRepository repository;
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAll(Pageable pageable) {
+    public Page<ProductMinDTO> findAll(Pageable pageable) {
         Page<Product> page = repository.findAll(pageable);
-        return page.map(x -> new ProductDTO(x));
+        return page.map(x -> new ProductMinDTO(x));
     }
 
     @Transactional(readOnly = true)
