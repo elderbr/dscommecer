@@ -1,7 +1,7 @@
 [![DevSuperior](https://github.com/elderbr/assets/blob/main/DevSuperior/devSuperior_icon.png?raw=true)
 ](https://devsuperior.com.br/)
 
-## Login e controle de acesso
+## Sistema DSCommerce
 
 ---
 
@@ -38,6 +38,8 @@ Este é o modelo conceitual do sistema DSCommerce. Considerações:
   pedido continua registrado com o preço real que foi vendido na época).
 - Um usuário pode ter um ou mais "roles", que são os perfis de acesso deste usuário
   no sistema (client, admin).
+
+![DsCommerce](https://github.com/elderbr/assets/blob/main/DevSuperior/JavaSpringProfissional/DsCommerce_diagrama.png?raw=true)
 
 ---
 
